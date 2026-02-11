@@ -1,0 +1,10 @@
+# Exclude non-ConnectBase files from deployment
+index.html
+script.js
+styles.css
+Dockerfile
+nginx.conf
+cors_server.py
+script_base64.txt
+styles_base64.txt
+node_modules
