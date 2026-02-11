@@ -1,0 +1,24 @@
+{
+  "name": "bookingquad",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gijimascoding/bookingquad.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gijimascoding/bookingquad/issues"
+  },
+  "homepage": "https://github.com/gijimascoding/bookingquad#readme",
+  "dependencies": {
+    "vercel": "^50.15.1"
+  }
+}

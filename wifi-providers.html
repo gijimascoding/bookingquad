@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConnectBase — ISP Directory for Corporate Housing</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1f310;</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #f5f7fa; color: #1a1a2e; line-height: 1.6; }
+        .container { max-width: 1440px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header */
+        header { background: linear-gradient(135deg, #0a0f1a 0%, #0f2847 50%, #163a6b 100%); color: #fff; padding: 56px 0 40px; text-align: center; position: relative; overflow: hidden; }
+        header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 30% 50%, rgba(59,130,246,0.08) 0%, transparent 50%), radial-gradient(circle at 70% 50%, rgba(16,185,129,0.06) 0%, transparent 50%); pointer-events: none; }
+        .brand { font-size: 0.85rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #60a5fa; margin-bottom: 12px; }
+        header h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; position: relative; }
+        header h1 span { background: linear-gradient(90deg, #60a5fa, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        header p { font-size: 1.05rem; opacity: 0.75; max-width: 700px; margin: 0 auto; line-height: 1.7; }
+        .header-note { margin-top: 12px; font-size: 0.85rem; opacity: 0.6; }
+        .stats-bar { display: flex; justify-content: center; gap: 32px; margin-top: 24px; flex-wrap: wrap; }
+        .stat-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.85); }
+        .stat-num { font-size: 1.3rem; font-weight: 800; color: #60a5fa; }
+
+        /* Claim Section */
+        .claim-section { background: linear-gradient(135deg, #eff6ff 0%, #ecfdf5 100%); border: 1px solid #bfdbfe; border-radius: 12px; padding: 0; margin-top: 28px; margin-bottom: 8px; overflow: hidden; }
+        .claim-banner { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; cursor: pointer; transition: background 0.2s; }
+        .claim-banner:hover { background: rgba(59,130,246,0.05); }
+        .claim-banner-left { display: flex; align-items: center; gap: 12px; }
+        .claim-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #2563eb, #10b981); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #fff; flex-shrink: 0; }
+        .claim-banner h3 { font-size: 1rem; color: #1e3a5f; margin-bottom: 2px; }
+        .claim-banner p { font-size: 0.82rem; color: #64748b; }
+        .claim-toggle { background: #2563eb; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; white-space: nowrap; }
+        .claim-toggle:hover { background: #1d4ed8; }
+        .claim-form-wrap { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .claim-form-wrap.open { max-height: 600px; }
+        .claim-form { padding: 0 24px 24px; border-top: 1px solid #bfdbfe; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full { grid-column: 1 / -1; }
+        .form-group label { font-size: 0.78rem; font-weight: 600; color: #334155; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea { padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-family: inherit; transition: border 0.2s, box-shadow 0.2s; outline: none; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .form-group textarea { resize: vertical; min-height: 60px; }
+        .form-submit { margin-top: 16px; display: flex; justify-content: flex-end; }
+        .form-submit button { background: linear-gradient(135deg, #2563eb, #10b981); color: #fff; border: none; padding: 12px 28px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity 0.2s, transform 0.15s; }
+        .form-submit button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .form-success { display: none; padding: 16px 24px; text-align: center; color: #065f46; font-weight: 600; font-size: 0.9rem; }
+
+        /* Tabs */
+        .tabs { display: flex; justify-content: center; gap: 0; margin-top: 32px; position: relative; z-index: 2; }
+        .tab-btn {
+            padding: 12px 32px; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer;
+            background: #e2e8f0; color: #475569; border-radius: 8px 8px 0 0; transition: all 0.2s;
+            font-family: inherit;
+        }
+        .tab-btn.active { background: #fff; color: #1a365d; box-shadow: 0 -2px 8px rgba(0,0,0,0.06); }
+        .tab-btn:hover:not(.active) { background: #cbd5e1; }
+
+        /* Tab Content */
+        .tab-content { display: none; background: #fff; border-radius: 0 8px 8px 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 24px; margin-bottom: 40px; }
+        .tab-content.active { display: block; }
+
+        /* Country header */
+        .country-header { margin-bottom: 20px; }
+        .country-header h2 { font-size: 1.4rem; color: #1a365d; margin-bottom: 4px; }
+        .country-header p { font-size: 0.85rem; color: #64748b; }
+
+        /* Sub-section */
+        .sub-section { margin-top: 32px; }
+        .sub-section h3 { font-size: 1.1rem; color: #1a365d; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+
+        /* Table */
+        .provider-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        .provider-table thead th {
+            background: #f1f5f9; padding: 10px 10px; text-align: left; font-weight: 600;
+            color: #334155; border-bottom: 2px solid #e2e8f0; white-space: nowrap; position: sticky; top: 0;
+        }
+        .provider-table tbody tr { border-bottom: 1px solid #f1f5f9; transition: background 0.15s; }
+        .provider-table tbody tr:hover { background: #f8fafc; }
+        .provider-table td { padding: 10px 10px; vertical-align: top; }
+        .provider-table td:first-child { font-weight: 600; color: #1a365d; white-space: nowrap; }
+        .price { font-weight: 700; color: #059669; white-space: nowrap; }
+        .speed { white-space: nowrap; }
+        .type-badge {
+            display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem;
+            font-weight: 600; background: #e0f2fe; color: #0369a1;
+        }
+        .type-badge.fiber { background: #d1fae5; color: #065f46; }
+        .type-badge.cable { background: #fef3c7; color: #92400e; }
+        .type-badge.dsl { background: #f3e8ff; color: #6b21a8; }
+        .type-badge.wireless { background: #ffe4e6; color: #9f1239; }
+        .type-badge.reseller { background: #e0e7ff; color: #3730a3; }
+        .type-badge.dealer { background: #fce7f3; color: #9d174d; }
+        .type-badge.satellite { background: #ffedd5; color: #9a3412; }
+        .type-badge.managed { background: #ccfbf1; color: #115e59; }
+        .notes { font-size: 0.75rem; color: #64748b; max-width: 180px; }
+        .biz-contact { font-size: 0.75rem; white-space: nowrap; }
+        .biz-contact a { color: #2563eb; text-decoration: none; }
+        .biz-contact a:hover { text-decoration: underline; }
+        .provider-link { color: #2563eb; text-decoration: none; font-size: 0.75rem; }
+        .provider-link:hover { text-decoration: underline; }
+
+        /* Footer */
+        footer { text-align: center; padding: 24px 0 40px; color: #94a3b8; font-size: 0.8rem; }
+
+        /* Responsive */
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.7rem; }
+            .stats-bar { gap: 16px; }
+            .stat-item { font-size: 0.8rem; }
+            .stat-num { font-size: 1.1rem; }
+            .tab-btn { padding: 10px 16px; font-size: 0.85rem; }
+            .provider-table { font-size: 0.75rem; }
+            .provider-table td, .provider-table th { padding: 6px 6px; }
+            .notes { max-width: 140px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .claim-banner { flex-direction: column; gap: 12px; text-align: center; }
+            .claim-banner-left { flex-direction: column; }
+        }
+        @media (max-width: 480px) {
+            .tab-btn { padding: 8px 12px; font-size: 0.78rem; }
+            header h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="brand">ConnectBase</div>
+        <h1>The ISP Directory for<br><span>Corporate Housing</span></h1>
+        <p>Find and compare internet service providers with verified business contacts for bulk deals across the United States, Canada, and the United Kingdom.</p>
+        <div class="stats-bar">
+            <div class="stat-item"><span class="stat-num">55+</span> Providers</div>
+            <div class="stat-item"><span class="stat-num">3</span> Countries</div>
+            <div class="stat-item"><span class="stat-num">100%</span> Verified</div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- Claim Your Business -->
+    <div class="claim-section" id="claimSection">
+        <div class="claim-banner" onclick="toggleClaim()">
+            <div class="claim-banner-left">
+                <div class="claim-icon">+</div>
+                <div>
+                    <h3>Are You an ISP? Get Listed.</h3>
+                    <p>Add your company to our directory and reach corporate housing managers looking for bulk internet deals.</p>
+                </div>
+            </div>
+            <button class="claim-toggle" id="claimBtn">Add Your Business &rarr;</button>
+        </div>
+        <div class="claim-form-wrap" id="claimFormWrap">
+            <div class="claim-form">
+                <form action="https://formspree.io/f/info@milehomes.com" method="POST" id="claimForm" onsubmit="handleClaimSubmit(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Company Name *</label>
+                            <input type="text" name="company" required placeholder="e.g. Acme Internet">
+                        </div>
+                        <div class="form-group">
+                            <label>Country *</label>
+                            <select name="country" required>
+                                <option value="">Select country...</option>
+                                <option value="United States">United States</option>
+                                <option value="Canada">Canada</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Email *</label>
+                            <input type="email" name="email" required placeholder="business@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" placeholder="+1 (555) 000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label>Website URL</label>
+                            <input type="url" name="website" placeholder="https://www.example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Service Type</label>
+                            <select name="service_type">
+                                <option value="">Select type...</option>
+                                <option value="Fiber">Fiber</option>
+                                <option value="Cable">Cable</option>
+                                <option value="DSL">DSL</option>
+                                <option value="5G/Wireless">5G / Wireless</option>
+                                <option value="Satellite">Satellite</option>
+                                <option value="Managed WiFi">Managed WiFi / MDU</option>
+                                <option value="Reseller">Reseller</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group full">
+                            <label>Additional Notes</label>
+                            <textarea name="message" placeholder="Tell us about your coverage area, plans, or anything else..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-submit">
+                        <button type="submit">Submit Listing Request</button>
+                    </div>
+                </form>
+                <div class="form-success" id="formSuccess">Thank you! Your listing request has been submitted. We'll review and add your business within 48 hours.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('us')">United States</button>
+        <button class="tab-btn" onclick="showTab('ca')">Canada</button>
+        <button class="tab-btn" onclick="showTab('uk')">United Kingdom</button>
+    </div>
+
+    <!-- ===================== US ===================== -->
+    <div class="tab-content active" id="tab-us">
+        <div class="country-header">
+            <h2>United States &mdash; Home Internet Providers</h2>
+            <p>Basic/entry-level plans from the largest US providers. Prices in USD. Includes business/corporate sales contacts for bulk deals.</p>
+        </div>
+
+        <!-- ISPs -->
+        <div class="sub-section">
+            <h3>Internet Service Providers</h3>
+            <div class="table-wrap">
+                <table class="provider-table">
+                    <thead>
+                        <tr><th>Provider</th><th>Type</th><th>Plan</th><th>Download</th><th>Upload</th><th>Price/mo</th><th>Biz Phone</th><th>Biz Email</th><th>Notes</th><th>Website</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Xfinity</td><td><span class="type-badge cable">Cable</span></td><td>Connect More</td><td class="speed">200 Mbps</td><td class="speed">10-20 Mbps</td><td class="price">$30/mo*</td><td class="biz-contact">866-429-0152</td><td class="biz-contact"><a href="https://business.comcast.com/contact">Use form</a></td><td class="notes">Promo 12 mo, then ~$84/mo. No data caps. Gateway included.</td><td><a class="provider-link" href="https://business.comcast.com" target="_blank">business.comcast.com</a></td></tr>
+                        <tr><td>AT&T Fiber</td><td><span class="type-badge fiber">Fiber</span></td><td>Internet 300</td><td class="speed">300 Mbps</td><td class="speed">300 Mbps</td><td class="price">$55/mo</td><td class="biz-contact">888-740-4027</td><td class="biz-contact"><a href="https://www.business.att.com/contact.html">Use form</a></td><td class="notes">AutoPay price. No contract, no caps. Symmetrical.</td><td><a class="provider-link" href="https://www.business.att.com" target="_blank">business.att.com</a></td></tr>
+                        <tr><td>Spectrum</td><td><span class="type-badge cable">Cable</span></td><td>Internet Advantage</td><td class="speed">100 Mbps</td><td class="speed">20 Mbps</td><td class="price">$30/mo*</td><td class="biz-contact">877-542-2865</td><td class="biz-contact"><a href="https://enterprise.spectrum.com">Use form</a></td><td class="notes">Promo 12 mo. No caps. Modem included.</td><td><a class="provider-link" href="https://enterprise.spectrum.com" target="_blank">enterprise.spectrum.com</a></td></tr>
+                        <tr><td>Verizon Fios</td><td><span class="type-badge fiber">Fiber</span></td><td>Fios 300</td><td class="speed">300 Mbps</td><td class="speed">300 Mbps</td><td class="price">$49.99/mo</td><td class="biz-contact">877-246-9977</td><td class="biz-contact"><a href="https://www.verizon.com/business">Use form</a></td><td class="notes">AutoPay. 3-yr lock. ~9 eastern states only.</td><td><a class="provider-link" href="https://www.verizon.com/business" target="_blank">verizon.com/business</a></td></tr>
+                        <tr><td>T-Mobile Home Internet</td><td><span class="type-badge wireless">5G</span></td><td>Rely</td><td class="speed">133-415 Mbps</td><td class="speed">12-55 Mbps</td><td class="price">$35-50/mo</td><td class="biz-contact">866-452-7705</td><td class="biz-contact"><a href="https://www.t-mobile.com/business">Use form</a></td><td class="notes">$35 w/ voice line. No contract, no caps. 5-yr guarantee.</td><td><a class="provider-link" href="https://www.t-mobile.com/business" target="_blank">t-mobile.com/business</a></td></tr>
+                        <tr><td>Google Fiber</td><td><span class="type-badge fiber">Fiber</span></td><td>Core 1 Gig</td><td class="speed">1,000 Mbps</td><td class="speed">1,000 Mbps</td><td class="price">$70/mo</td><td class="biz-contact">855-418-8326</td><td class="biz-contact"><a href="https://fiber.google.com/business/">Use form</a></td><td class="notes">No contract, no caps. Free equipment. Limited metros.</td><td><a class="provider-link" href="https://fiber.google.com/business/" target="_blank">fiber.google.com</a></td></tr>
+                        <tr><td>Cox</td><td><span class="type-badge cable">Cable</span></td><td>StraightUp Internet</td><td class="speed">100 Mbps</td><td class="speed">5 Mbps</td><td class="price">$50/mo</td><td class="biz-contact">866-446-7777</td><td class="biz-contact"><a href="mailto:coxcorp.customerrelations@cox.com">Email</a></td><td class="notes">Prepaid. 3-yr guarantee. 1.25 TB data cap.</td><td><a class="provider-link" href="https://www.cox.com/business/home.html" target="_blank">cox.com/business</a></td></tr>
+                        <tr><td>Quantum Fiber</td><td><span class="type-badge fiber">Fiber</span></td><td>200 Mbps</td><td class="speed">200 Mbps</td><td class="speed">200 Mbps</td><td class="price">$45/mo</td><td class="biz-contact">833-970-9504</td><td class="biz-contact"><a href="mailto:fibersuccess@q.com">Email</a></td><td class="notes">Price for Life. No contract, no caps. Symmetrical.</td><td><a class="provider-link" href="https://www.quantumfiber.com" target="_blank">quantumfiber.com</a></td></tr>
+                        <tr><td>Frontier Fiber</td><td><span class="type-badge fiber">Fiber</span></td><td>Fiber 500</td><td class="speed">500 Mbps</td><td class="speed">500 Mbps</td><td class="price">$49.99/mo</td><td class="biz-contact">855-339-1715</td><td class="biz-contact"><a href="https://business.frontier.com">Use form</a></td><td class="notes">AutoPay. No contract, no caps. Symmetrical.</td><td><a class="provider-link" href="https://business.frontier.com" target="_blank">business.frontier.com</a></td></tr>
+                        <tr><td>Optimum</td><td><span class="type-badge cable">Cable</span></td><td>FASTPASS</td><td class="speed">200 Mbps</td><td class="speed">20 Mbps</td><td class="price">$25/mo</td><td class="biz-contact">866-209-1099</td><td class="biz-contact"><a href="https://business.optimum.net">Use form</a></td><td class="notes">No contract, no caps. Equip fees ~$13.50/mo extra.</td><td><a class="provider-link" href="https://business.optimum.net" target="_blank">business.optimum.net</a></td></tr>
+                        <tr><td>WOW!</td><td><span class="type-badge cable">Cable</span></td><td>Internet 300</td><td class="speed">300 Mbps</td><td class="speed">20 Mbps</td><td class="price">$30/mo*</td><td class="biz-contact">866-644-3513</td><td class="biz-contact"><a href="mailto:support@wowforbusiness.com">Email</a></td><td class="notes">Promo w/ AutoPay. No caps. Regional (AL, FL, GA, IL, IN, MI, OH, SC, TN).</td><td><a class="provider-link" href="https://www.wowforbusiness.com" target="_blank">wowforbusiness.com</a></td></tr>
+                        <tr><td>Astound Broadband</td><td><span class="type-badge cable">Cable</span></td><td>300 Mbps</td><td class="speed">300 Mbps</td><td class="speed">20 Mbps</td><td class="price">$20-30/mo*</td><td class="biz-contact">833-249-2786</td><td class="biz-contact"><a href="https://www.astound.com/business/">Use form</a></td><td class="notes">Promo varies by region. No caps, no contract.</td><td><a class="provider-link" href="https://www.astound.com/business/" target="_blank">astound.com/business</a></td></tr>
+                        <tr><td>Windstream/Kinetic</td><td><span class="type-badge dsl">DSL/Fiber</span></td><td>Kinetic Internet</td><td class="speed">Up to 1 Gbps</td><td class="speed">Varies</td><td class="price">$45-65/mo</td><td class="biz-contact">865-383-1029</td><td class="biz-contact"><a href="https://business.windstream.com">Use form</a></td><td class="notes">Rural focus. No data caps, no contracts. 18 states fiber.</td><td><a class="provider-link" href="https://business.windstream.com" target="_blank">business.windstream.com</a></td></tr>
+                        <tr><td>Mediacom</td><td><span class="type-badge cable">Cable</span></td><td>Access Internet 60</td><td class="speed">60 Mbps</td><td class="speed">5 Mbps</td><td class="price">~$30/mo*</td><td class="biz-contact">844-339-4170</td><td class="biz-contact"><a href="mailto:info@mediacomcc.com">Email</a></td><td class="notes">5th largest US cable. 22 states. Enterprise: 855-612-0039.</td><td><a class="provider-link" href="https://mediacombusiness.com" target="_blank">mediacombusiness.com</a></td></tr>
+                        <tr><td>EarthLink</td><td><span class="type-badge reseller">Reseller</span></td><td>Fiber 100</td><td class="speed">100 Mbps</td><td class="speed">100 Mbps</td><td class="price">$54.90/mo</td><td class="biz-contact">800-327-8454</td><td class="biz-contact"><a href="https://www.earthlink.net/business-internet/">Use form</a></td><td class="notes">Resells AT&T/Lumen networks. 12-mo contracts. Modem $14.95/mo extra.</td><td><a class="provider-link" href="https://www.earthlink.net/business-internet/" target="_blank">earthlink.net</a></td></tr>
+                        <tr><td>HughesNet</td><td><span class="type-badge satellite">Satellite</span></td><td>Select</td><td class="speed">25 Mbps</td><td class="speed">3 Mbps</td><td class="price">~$50/mo*</td><td class="biz-contact">866-482-1777</td><td class="biz-contact"><a href="mailto:advancedsupport@hughes.net">Email</a></td><td class="notes">Nationwide satellite. 24-mo contract. Up to 100 Mbps. Rural coverage.</td><td><a class="provider-link" href="https://www.hughesnet.com/business" target="_blank">hughesnet.com/business</a></td></tr>
+                        <tr><td>Starlink</td><td><span class="type-badge satellite">Satellite</span></td><td>Residential</td><td class="speed">50-200 Mbps</td><td class="speed">10-20 Mbps</td><td class="price">$120/mo</td><td class="biz-contact">866-606-5103</td><td class="biz-contact"><a href="https://www.starlink.com">Ticket only</a></td><td class="notes">Best rural satellite. Low latency. $499 equipment. No contract. Phone for offline only.</td><td><a class="provider-link" href="https://www.starlink.com" target="_blank">starlink.com</a></td></tr>
+                        <tr><td>CenturyLink/Fidium</td><td><span class="type-badge dsl">DSL/Fiber</span></td><td>Fidium 100</td><td class="speed">100 Mbps</td><td class="speed">100 Mbps</td><td class="price">~$30/mo*</td><td class="biz-contact">877-744-4416</td><td class="biz-contact"><a href="https://business.centurylink.com">Use form</a></td><td class="notes">Now "Fidium" brand. 23 states. No caps, symmetrical fiber.</td><td><a class="provider-link" href="https://business.centurylink.com" target="_blank">business.centurylink.com</a></td></tr>
+                        <tr><td>Consolidated/Fidium</td><td><span class="type-badge fiber">Fiber</span></td><td>100 Mbps</td><td class="speed">100 Mbps</td><td class="speed">100 Mbps</td><td class="price">~$30/mo*</td><td class="biz-contact">844-968-7224</td><td class="biz-contact"><a href="https://www.consolidated.com/business">Use form</a></td><td class="notes">NE US (NH, ME, VT). Symmetrical. No caps. Fidium rebrand.</td><td><a class="provider-link" href="https://www.consolidated.com/business" target="_blank">consolidated.com/business</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MDU & Managed WiFi -->
+        <div class="sub-section">
+            <h3>MDU & Managed WiFi Intermediaries</h3>
+            <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;">These companies manage the network inside buildings, offering seamless "hotel-like" connectivity. Best for corporate housing and short-term stays. Pricing is custom/bulk.</p>
+            <div class="table-wrap">
+                <table class="provider-table">
+                    <thead>
+                        <tr><th>Provider</th><th>Type</th><th>Focus</th><th>Coverage</th><th>Price/mo</th><th>Biz Phone</th><th>Biz Email</th><th>Notes</th><th>Website</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Pavlov Media</td><td><span class="type-badge managed">Managed WiFi</span></td><td>MDU / Student Housing</td><td>National</td><td class="price">Custom</td><td class="biz-contact">888-799-7249</td><td class="biz-contact"><a href="mailto:sales@pavlovmedia.com">Email</a></td><td class="notes">Largest private MDU/off-campus housing WiFi provider in the US.</td><td><a class="provider-link" href="https://pavlovmedia.com" target="_blank">pavlovmedia.com</a></td></tr>
+                        <tr><td>Single Digits</td><td><span class="type-badge managed">Managed WiFi</span></td><td>Hospitality / MDU</td><td>National</td><td class="price">Custom</td><td class="biz-contact">877-778-9283</td><td class="biz-contact"><a href="https://singledigits.com">Use form</a></td><td class="notes">Hospitality & MDU specialist. Excellent for short-term corporate stays.</td><td><a class="provider-link" href="https://singledigits.com" target="_blank">singledigits.com</a></td></tr>
+                        <tr><td>Boingo Wireless</td><td><span class="type-badge managed">Managed WiFi</span></td><td>Military / Luxury Apts</td><td>National</td><td class="price">Custom</td><td class="biz-contact">N/A</td><td class="biz-contact"><a href="mailto:multifamily@boingo.com">Email</a></td><td class="notes">Military bases, airports, luxury apartments. 130+ venues. WiFi 7 rollout.</td><td><a class="provider-link" href="https://www.boingo.com" target="_blank">boingo.com</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <p style="margin-top:12px; font-size:0.75rem; color:#94a3b8;">* Promotional pricing &mdash; increases after introductory period. All prices vary by location.</p>
+    </div>
+
+    <!-- ===================== CANADA ===================== -->
+    <div class="tab-content" id="tab-ca">
+        <div class="country-header">
+            <h2>Canada &mdash; Home Internet Providers</h2>
+            <p>Major carriers, regional providers, and independent resellers. Prices in CAD. Shaw merged into Rogers (2023); Fido home internet discontinued.</p>
+        </div>
+
+        <!-- Major Providers -->
+        <div class="sub-section">
+            <h3>Major Providers</h3>
+            <div class="table-wrap">
+                <table class="provider-table">
+                    <thead>
+                        <tr><th>Provider</th><th>Type</th><th>Plan</th><th>Download</th><th>Upload</th><th>Price/mo</th><th>Biz Phone</th><th>Biz Email</th><th>Notes</th><th>Website</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Bell</td><td><span class="type-badge fiber">Fibre/DSL</span></td><td>Fibe 50</td><td class="speed">50 Mbps</td><td class="speed">10 Mbps</td><td class="price">$50-60/mo</td><td class="biz-contact">866-709-6079</td><td class="biz-contact"><a href="mailto:sales@bell.ca">Email</a></td><td class="notes">MDU sales line. 2-yr pricing. Unlimited data. Modem included.</td><td><a class="provider-link" href="https://business.bell.ca" target="_blank">business.bell.ca</a></td></tr>
+                        <tr><td>Rogers</td><td><span class="type-badge cable">Cable</span></td><td>Ignite Internet 50</td><td class="speed">50 Mbps</td><td class="speed">10 Mbps</td><td class="price">$60/mo</td><td class="biz-contact">833-690-0649</td><td class="biz-contact"><a href="https://www.rogers.com/business/contact-us">Use form</a></td><td class="notes">MDU/bulk line. Unlimited data. Modem included. Promo on 2-yr.</td><td><a class="provider-link" href="https://www.rogers.com/business/" target="_blank">rogers.com/business</a></td></tr>
+                        <tr><td>Telus</td><td><span class="type-badge fiber">Fibre/DSL</span></td><td>Internet 25 / PureFibre 250</td><td class="speed">25-250 Mbps</td><td class="speed">2-250 Mbps</td><td class="price">$75-95/mo</td><td class="biz-contact">855-595-5588</td><td class="biz-contact"><a href="https://www.telus.com/en/business">Use form</a></td><td class="notes">Multi-unit line. 2-yr term. Unlimited. AB, BC, parts QC/ON.</td><td><a class="provider-link" href="https://www.telus.com/en/business" target="_blank">telus.com/business</a></td></tr>
+                        <tr><td>Cogeco</td><td><span class="type-badge cable">Cable/Fibre</span></td><td>UltraFibre 60</td><td class="speed">60 Mbps</td><td class="speed">10 Mbps</td><td class="price">$49.99/mo</td><td class="biz-contact">855-943-0542</td><td class="biz-contact"><a href="https://www.cogeco.ca/en/business">Use form</a></td><td class="notes">Business solutions. Unlimited data. Free modem. ON & QC only.</td><td><a class="provider-link" href="https://www.cogeco.ca/en/business" target="_blank">cogeco.ca/business</a></td></tr>
+                        <tr><td>Vid&eacute;otron</td><td><span class="type-badge cable">Cable/Fibre</span></td><td>Helix Internet 30</td><td class="speed">30 Mbps</td><td class="speed">~10 Mbps</td><td class="price">$50/mo</td><td class="biz-contact">877-512-8590</td><td class="biz-contact"><a href="mailto:affaires@videotron.com">Email</a></td><td class="notes">Unlimited. Quebec only. Helix gateway included.</td><td><a class="provider-link" href="https://videotronaffaires.com" target="_blank">videotronaffaires.com</a></td></tr>
+                        <tr><td>SaskTel</td><td><span class="type-badge dsl">DSL/Fibre</span></td><td>interNET 25</td><td class="speed">25 Mbps</td><td class="speed">2 Mbps</td><td class="price">$55/mo*</td><td class="biz-contact">844-727-5835</td><td class="biz-contact"><a href="mailto:sales@sasktel.com">Email</a></td><td class="notes">2-yr promo. Unlimited. Saskatchewan only.</td><td><a class="provider-link" href="https://www.sasktel.com/business/" target="_blank">sasktel.com/business</a></td></tr>
+                        <tr><td>Eastlink</td><td><span class="type-badge cable">Cable</span></td><td>Internet 350</td><td class="speed">350 Mbps</td><td class="speed">~10 Mbps</td><td class="price">$85/mo*</td><td class="biz-contact">877-813-1727</td><td class="biz-contact"><a href="mailto:business.sales@corp.eastlink.ca">Email</a></td><td class="notes">First 12 mo, then $113/mo. Atlantic Canada + ON/AB.</td><td><a class="provider-link" href="https://business.eastlink.ca" target="_blank">business.eastlink.ca</a></td></tr>
+                        <tr><td>Freedom Mobile</td><td><span class="type-badge wireless">5G/Cable</span></td><td>5G Home Internet</td><td class="speed">Up to 100 Mbps</td><td class="speed">Varies</td><td class="price">$24-39/mo</td><td class="biz-contact">877-946-3184</td><td class="biz-contact"><a href="mailto:info@freedommobile.ca">Email</a></td><td class="notes">$24 w/ mobile plan. 5G launched Dec 2025. Biz via Rogers.</td><td><a class="provider-link" href="https://www.freedommobile.ca" target="_blank">freedommobile.ca</a></td></tr>
+                        <tr><td>Xplore (Xplornet)</td><td><span class="type-badge wireless">Wireless/Sat</span></td><td>Wireless 50</td><td class="speed">50 Mbps</td><td class="speed">Varies</td><td class="price">$49.99/mo</td><td class="biz-contact">877-605-3106</td><td class="biz-contact"><a href="mailto:support@business.xplore.ca">Email</a></td><td class="notes">Rural Canada. Fibre/wireless/satellite. Unlimited data on fibre.</td><td><a class="provider-link" href="https://business.xplore.ca" target="_blank">business.xplore.ca</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Boutique & Building-Specific ISPs -->
+        <div class="sub-section">
+            <h3>Boutique & Building-Specific ISPs</h3>
+            <div class="table-wrap">
+                <table class="provider-table">
+                    <thead>
+                        <tr><th>Provider</th><th>Type</th><th>Plan</th><th>Download</th><th>Upload</th><th>Price/mo</th><th>Biz Phone</th><th>Biz Email</th><th>Notes</th><th>Website</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Beanfield</td><td><span class="type-badge fiber">Fibre (Own)</span></td><td>1 Gbps</td><td class="speed">1,000 Mbps</td><td class="speed">1,000 Mbps</td><td class="price">$35-50/mo</td><td class="biz-contact">416-532-1555</td><td class="biz-contact"><a href="mailto:sales@beanfield.com">Email</a></td><td class="notes">Luxury condo fibre specialist. Toronto/Montreal/Vancouver. No contracts. Price guarantee.</td><td><a class="provider-link" href="https://www.beanfield.com" target="_blank">beanfield.com</a></td></tr>
+                        <tr><td>Moby</td><td><span class="type-badge fiber">Fibre (Own)</span></td><td>Fibre 150</td><td class="speed">150 Mbps</td><td class="speed">150 Mbps</td><td class="price">~$40/mo</td><td class="biz-contact">403-986-6629</td><td class="biz-contact"><a href="mailto:subscribers@getmoby.com">Email</a></td><td class="notes">Own fibre network. Calgary/Edmonton MDUs. Symmetrical. No caps. 3-yr price guarantee.</td><td><a class="provider-link" href="https://getmoby.com" target="_blank">getmoby.com</a></td></tr>
+                        <tr><td>Novus</td><td><span class="type-badge fiber">Fibre (Own)</span></td><td>Internet 1000</td><td class="speed">1,000 Mbps</td><td class="speed">1,000 Mbps</td><td class="price">$50/mo</td><td class="biz-contact">604-642-6688</td><td class="biz-contact"><a href="https://www.novusnow.ca">Use form</a></td><td class="notes">Metro Vancouver condos/apartments. No contracts, unlimited, 3-yr price guarantee.</td><td><a class="provider-link" href="https://www.novusnow.ca" target="_blank">novusnow.ca</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Resellers & Independent ISPs -->
+        <div class="sub-section">
+            <h3>Resellers, Dealers & Independent ISPs</h3>
+            <div class="table-wrap">
+                <table class="provider-table">
+                    <thead>
+                        <tr><th>Provider</th><th>Type</th><th>Plan</th><th>Download</th><th>Upload</th><th>Price/mo</th><th>Biz Phone</th><th>Biz Email</th><th>Notes</th><th>Website</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>TekSavvy</td><td><span class="type-badge reseller">Reseller</span></td><td>Cable 15 Unlimited</td><td class="speed">15 Mbps</td><td class="speed">~1 Mbps</td><td class="price">$27.95/mo</td><td class="biz-contact">877-313-1575</td><td class="biz-contact"><a href="mailto:business@teksavvy.com">Email</a></td><td class="notes">No contract. Unlimited. Wide national coverage.</td><td><a class="provider-link" href="https://business.teksavvy.com" target="_blank">business.teksavvy.com</a></td></tr>
+                        <tr><td>Oxio</td><td><span class="type-badge reseller">Reseller</span></td><td>15 Mbps</td><td class="speed">15 Mbps</td><td class="speed">~1-2 Mbps</td><td class="price">$25/mo</td><td class="biz-contact">877-799-6033</td><td class="biz-contact"><a href="mailto:bonjour@oxio.ca">Email</a></td><td class="notes">No contract. Price locked forever. Consumer-focused, no biz division.</td><td><a class="provider-link" href="https://oxio.ca/en" target="_blank">oxio.ca</a></td></tr>
+                        <tr><td>VMedia</td><td><span class="type-badge reseller">Reseller</span></td><td>Cable 15</td><td class="speed">15 Mbps</td><td class="speed">~0.5 Mbps</td><td class="price">$32.95/mo</td><td class="biz-contact">855-333-8269</td><td class="biz-contact"><a href="mailto:billing@vmedia.ca">Email</a></td><td class="notes">No contracts. Unlimited. Wide coverage. Also offers IPTV.</td><td><a class="provider-link" href="https://www.vmedia.ca" target="_blank">vmedia.ca</a></td></tr>
+                        <tr><td>CanNet Telecom</td><td><span class="type-badge reseller">Reseller</span></td><td>40 Mbps</td><td class="speed">40 Mbps</td><td class="speed">~10 Mbps</td><td class="price">$29.98/mo</td><td class="biz-contact">416-800-2323</td><td class="biz-contact"><a href="https://www.cannettel.com">Use form</a></td><td class="notes">Largest 3rd-party ISP. No contracts, unlimited. ON, QC, MB, BC, SK, AB.</td><td><a class="provider-link" href="https://www.cannettel.com" target="_blank">cannettel.com</a></td></tr>
+                        <tr><td>EBOX</td><td><span class="type-badge reseller">Reseller</span></td><td>Internet 25</td><td class="speed">25 Mbps</td><td class="speed">Varies</td><td class="price">$40/mo</td><td class="biz-contact">844-323-3269</td><td class="biz-contact"><a href="mailto:support@ebox.ca">Email</a></td><td class="notes">Bell-owned. Absorbed Distributel & Oricom. QC & ON. No contracts.</td><td><a class="provider-link" href="https://www.ebox.ca" target="_blank">ebox.ca</a></td></tr>
+                        <tr><td>Primus</td><td><span class="type-badge reseller">Reseller</span></td><td>Internet 75</td><td class="speed">75 Mbps</td><td class="speed">Varies</td><td class="price">$34.95/mo*</td><td class="biz-contact">888-222-8577</td><td class="biz-contact"><a href="mailto:enterprisesupport@primustel.ca">Email</a></td><td class="notes">6-mo promo then $54.95/mo. Unlimited. AB, BC, MB, NB, ON, QC, SK.</td><td><a class="provider-link" href="https://www.primus.ca" target="_blank">primus.ca</a></td></tr>
+                        <tr><td>Carry Telecom</td><td><span class="type-badge reseller">Reseller</span></td><td>Cable 100</td><td class="speed">100 Mbps</td><td class="speed">10 Mbps</td><td class="price">~$29.99/mo</td><td class="biz-contact">647-560-4448</td><td class="biz-contact"><a href="mailto:support@carrytel.ca">Email</a></td><td class="notes">Unlimited. ON, QC, NB, NL. 7-day trial period.</td><td><a class="provider-link" href="https://www.carrytel.ca" target="_blank">carrytel.ca</a></td></tr>
+                        <tr><td>CIK Telecom</td><td><span class="type-badge reseller">Reseller</span></td><td>FiberLite 25</td><td class="speed">25 Mbps</td><td class="speed">10 Mbps</td><td class="price">~$40/mo*</td><td class="biz-contact">416-848-1517</td><td class="biz-contact"><a href="mailto:care.cs@ciktel.com">Email</a></td><td class="notes">Cable/DSL reseller. ON & QC. Budget option. No contracts.</td><td><a class="provider-link" href="https://www.ciktel.com" target="_blank">ciktel.com</a></td></tr>
+                        <tr><td>Purple Cow</td><td><span class="type-badge reseller">Reseller</span></td><td>Entry plan</td><td class="speed">Varies</td><td class="speed">Varies</td><td class="price">~$40-50/mo</td><td class="biz-contact">902-800-2660</td><td class="biz-contact"><a href="https://www.purplecowinternet.com">Use form</a></td><td class="notes">Growing independent provider in Nova Scotia. Consumer-focused.</td><td><a class="provider-link" href="https://www.purplecowinternet.com" target="_blank">purplecowinternet.com</a></td></tr>
+                        <tr><td>Wireless DNA</td><td><span class="type-badge dealer">Dealer</span></td><td>Sells Rogers plans</td><td class="speed">Varies</td><td class="speed">Varies</td><td class="price">Rogers pricing</td><td class="biz-contact">416-598-5655</td><td class="biz-contact"><a href="mailto:info@wdna.ca">Email</a></td><td class="notes">Authorized Rogers/Fido/Chatr dealer. 82+ stores. Not an ISP &mdash; contracts are with Rogers.</td><td><a class="provider-link" href="https://wirelessdna.ca" target="_blank">wirelessdna.ca</a></td></tr>
+                        <tr><td>Virgin Plus</td><td><span class="type-badge fiber">DSL/Fibre</span></td><td>Internet 10 / 30</td><td class="speed">10-30 Mbps</td><td class="speed">N/A</td><td class="price">$40/mo</td><td class="biz-contact">855-238-6847</td><td class="biz-contact"><a href="mailto:info@virginmobile.ca">Email</a></td><td class="notes">Bell sub. No new ON customers (Jan 2026). QC only. No biz division &mdash; use Bell Business.</td><td><a class="provider-link" href="https://www.virginplus.ca" target="_blank">virginplus.ca</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <p style="margin-top:12px; font-size:0.75rem; color:#94a3b8;">* Promotional pricing. All prices vary by location and postal code. Distributel & Oricom are now part of EBOX (Bell-owned). Start.ca is now Telus-owned (Koodo).</p>
+    </div>
+
+    <!-- ===================== UK ===================== -->
+    <div class="tab-content" id="tab-uk">
+        <div class="country-header">
+            <h2>United Kingdom &mdash; Home Internet Providers</h2>
+            <p>Major carriers and independent ISPs. Prices in GBP. Most providers apply annual mid-contract price increases of &pound;3-4/mo from April 2026.</p>
+        </div>
+
+        <!-- ISPs -->
+        <div class="sub-section">
+            <h3>Internet Service Providers</h3>
+            <div class="table-wrap">
+                <table class="provider-table">
+                    <thead>
+                        <tr><th>Provider</th><th>Type</th><th>Plan</th><th>Download</th><th>Upload</th><th>Price/mo</th><th>Biz Phone</th><th>Biz Email</th><th>Notes</th><th>Website</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>BT Broadband</td><td><span class="type-badge">FTTC</span></td><td>Fibre Essential</td><td class="speed">36 Mbps</td><td class="speed">~9 Mbps</td><td class="price">&pound;28.99/mo</td><td class="biz-contact">0800 800 152</td><td class="biz-contact"><a href="mailto:sales@businessdirect.bt.com">Email</a></td><td class="notes">24-mo. Unlimited. +&pound;4/mo Mar 2026. Social tariff &pound;15/mo.</td><td><a class="provider-link" href="https://business.bt.com" target="_blank">business.bt.com</a></td></tr>
+                        <tr><td>Sky Broadband</td><td><span class="type-badge">FTTC</span></td><td>Superfast</td><td class="speed">67 Mbps</td><td class="speed">16 Mbps</td><td class="price">&pound;28/mo</td><td class="biz-contact">0844 241 0059</td><td class="biz-contact"><a href="mailto:service.b2b@skybusinesssupport.sky">Email</a></td><td class="notes">24-mo. Unlimited. +&pound;3/mo Apr 2026. Social tariff &pound;20/mo.</td><td><a class="provider-link" href="https://www.sky.com/business" target="_blank">sky.com/business</a></td></tr>
+                        <tr><td>Virgin Media O2</td><td><span class="type-badge cable">Cable</span></td><td>M125 Fibre</td><td class="speed">132 Mbps</td><td class="speed">~20 Mbps</td><td class="price">&pound;23.99/mo*</td><td class="biz-contact">0800 052 1135</td><td class="biz-contact"><a href="mailto:expansionenquiries@virginmedia.co.uk">Email</a></td><td class="notes">24-mo. Own cable network. Reverts ~&pound;68/mo.</td><td><a class="provider-link" href="https://www.virginmediabusiness.co.uk" target="_blank">virginmediabusiness.co.uk</a></td></tr>
+                        <tr><td>TalkTalk</td><td><span class="type-badge">FTTC</span></td><td>Fibre 35</td><td class="speed">38 Mbps</td><td class="speed">9.5 Mbps</td><td class="price">&pound;26/mo</td><td class="biz-contact">0330 173 5674</td><td class="biz-contact"><a href="mailto:cliquery@talktalkplc.com">Email</a></td><td class="notes">24-mo. Built-in rises: &pound;30 Apr 2026. Enterprise: 0808 304 7490.</td><td><a class="provider-link" href="https://business.talktalk.co.uk" target="_blank">business.talktalk.co.uk</a></td></tr>
+                        <tr><td>Plusnet</td><td><span class="type-badge fiber">FTTP</span></td><td>Full Fibre 74</td><td class="speed">74 Mbps</td><td class="speed">N/A</td><td class="price">&pound;21.99/mo</td><td class="biz-contact">0800 023 2221</td><td class="biz-contact"><a href="mailto:dealers@plus.net">Email</a></td><td class="notes">BT sub. Biz broadband ceased Jun 2025 &mdash; migrated to BT Business.</td><td><a class="provider-link" href="https://www.plus.net/broadband/" target="_blank">plus.net</a></td></tr>
+                        <tr><td>Vodafone</td><td><span class="type-badge">FTTC</span></td><td>Fibre 1</td><td class="speed">38 Mbps</td><td class="speed">10 Mbps</td><td class="price">&pound;24/mo</td><td class="biz-contact">0808 060 0802</td><td class="biz-contact"><a href="https://www.vodafone.co.uk/business">Use form</a></td><td class="notes">24-mo. Rises to &pound;28 Apr 2026. Social tariff &pound;20/mo.</td><td><a class="provider-link" href="https://www.vodafone.co.uk/business" target="_blank">vodafone.co.uk/business</a></td></tr>
+                        <tr><td>EE</td><td><span class="type-badge">FTTC/FTTP</span></td><td>Full Fibre 36 Essentials</td><td class="speed">36 Mbps</td><td class="speed">9 Mbps</td><td class="price">&pound;24/mo</td><td class="biz-contact">0800 079 0888</td><td class="biz-contact"><a href="https://business.ee.co.uk">Use form</a></td><td class="notes">24-mo. BT Group. Smart Hub. 6 mo Apple TV+.</td><td><a class="provider-link" href="https://business.ee.co.uk" target="_blank">business.ee.co.uk</a></td></tr>
+                        <tr><td>Hyperoptic</td><td><span class="type-badge fiber">FTTP</span></td><td>50Mb Full Fibre</td><td class="speed">50 Mbps</td><td class="speed">50 Mbps</td><td class="price">&pound;20/mo*</td><td class="biz-contact">0333 332 1137</td><td class="biz-contact"><a href="mailto:business.sales@hyperoptic.com">Email</a></td><td class="notes">Promo (usually &pound;26). 24-mo. Symmetrical. Select city buildings.</td><td><a class="provider-link" href="https://www.hyperoptic.com" target="_blank">hyperoptic.com</a></td></tr>
+                        <tr><td>Community Fibre</td><td><span class="type-badge fiber">FTTP</span></td><td>Essential</td><td class="speed">35 Mbps</td><td class="speed">35 Mbps</td><td class="price">&pound;12.50/mo</td><td class="biz-contact">0808 196 6056</td><td class="biz-contact"><a href="mailto:partner.sales@communityfibre.co.uk">Email</a></td><td class="notes">12-mo. Symmetrical. London & South East only. Partner sales line.</td><td><a class="provider-link" href="https://communityfibre.co.uk" target="_blank">communityfibre.co.uk</a></td></tr>
+                        <tr><td>Zen Internet</td><td><span class="type-badge">FTTC</span></td><td>Unlimited Fibre 1</td><td class="speed">~35 Mbps</td><td class="speed">~9 Mbps</td><td class="price">&pound;32/mo</td><td class="biz-contact">01706 902583</td><td class="biz-contact"><a href="mailto:BusinessSales@zen.co.uk">Email</a></td><td class="notes">18-mo. No mid-contract rises (Price Promise). Which? recommended.</td><td><a class="provider-link" href="https://business.zen.co.uk" target="_blank">business.zen.co.uk</a></td></tr>
+                        <tr><td>NOW Broadband</td><td><span class="type-badge dsl">ADSL</span></td><td>Brilliant Broadband</td><td class="speed">11 Mbps</td><td class="speed">N/A</td><td class="price">&pound;18/mo</td><td class="biz-contact">0330 332 3050</td><td class="biz-contact"><a href="mailto:customerservices@nowtv.com">Email</a></td><td class="notes">12-mo. Sky sub. No biz division &mdash; use Sky Business for bulk.</td><td><a class="provider-link" href="https://www.nowtv.com/broadband" target="_blank">nowtv.com</a></td></tr>
+                        <tr><td>Cuckoo Broadband</td><td><span class="type-badge fiber">FTTP</span></td><td>150 Mbps</td><td class="speed">150 Mbps</td><td class="speed">N/A</td><td class="price">&pound;32/mo</td><td class="biz-contact">N/A</td><td class="biz-contact"><a href="https://www.cuckoo.co">Use form</a></td><td class="notes">24-mo. +&pound;3/mo Apr rise. eero Pro 6E router free. Consumer-focused.</td><td><a class="provider-link" href="https://www.cuckoo.co" target="_blank">cuckoo.co</a></td></tr>
+                        <tr><td>Gigaclear</td><td><span class="type-badge fiber">FTTP</span></td><td>Superfast 80</td><td class="speed">80 Mbps</td><td class="speed">20 Mbps</td><td class="price">~&pound;24/mo</td><td class="biz-contact">01865 591 131</td><td class="biz-contact"><a href="mailto:support@gigaclear.com">Email</a></td><td class="notes">Rural full-fibre. 18-mo. Underserved areas focus.</td><td><a class="provider-link" href="https://gigaclear.com" target="_blank">gigaclear.com</a></td></tr>
+                        <tr><td>KCOM</td><td><span class="type-badge fiber">FTTP</span></td><td>Full Fibre 300</td><td class="speed">300 Mbps</td><td class="speed">300 Mbps</td><td class="price">&pound;34.99/mo</td><td class="biz-contact">0800 9155 777</td><td class="biz-contact"><a href="mailto:businesssales@kcom.com">Email</a></td><td class="notes">Hull & E. Yorkshire only. Incumbent provider. 24-mo. Symmetrical.</td><td><a class="provider-link" href="https://www.kcom.com/business" target="_blank">kcom.com/business</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MDU & Managed WiFi Specialists -->
+        <div class="sub-section">
+            <h3>MDU & Managed WiFi Specialists</h3>
+            <p style="font-size:0.8rem; color:#64748b; margin-bottom:12px;">These providers manage in-building networks for multi-tenant properties. Ideal for corporate housing and build-to-rent. Pricing is custom/quote-based.</p>
+            <div class="table-wrap">
+                <table class="provider-table">
+                    <thead>
+                        <tr><th>Provider</th><th>Type</th><th>Focus</th><th>Coverage</th><th>Price/mo</th><th>Biz Phone</th><th>Biz Email</th><th>Notes</th><th>Website</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Ask4</td><td><span class="type-badge managed">Managed WiFi</span></td><td>Student / Corporate</td><td>UK + 11 EU countries</td><td class="price">Custom</td><td class="biz-contact">0114 303 3200</td><td class="biz-contact"><a href="mailto:sales@ask4.com">Email</a></td><td class="notes">#1 UK specialist for student & corporate multi-tenant buildings. 350K+ users. 24/7 support.</td><td><a class="provider-link" href="https://www.ask4.com" target="_blank">ask4.com</a></td></tr>
+                        <tr><td>Glide</td><td><span class="type-badge managed">Managed WiFi</span></td><td>BTR / Landlords</td><td>UK-wide</td><td class="price">~&pound;42/mo</td><td class="biz-contact">0333 123 1190</td><td class="biz-contact"><a href="mailto:glide@glide.co.uk">Email</a></td><td class="notes">40K+ BTR apartments. Bills-included model. Also bundles utilities (gas, electricity).</td><td><a class="provider-link" href="https://glide.co.uk" target="_blank">glide.co.uk</a></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <p style="margin-top:12px; font-size:0.75rem; color:#94a3b8;">* Promotional pricing. Nearly all UK providers apply annual mid-contract price rises of &pound;3-4/mo. Plusnet Business ceased Jun 2025 &mdash; customers migrated to BT Business.</p>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <p style="font-weight:600; color:#64748b; margin-bottom:4px;">ConnectBase &copy; 2026 &mdash; The ISP Directory for Corporate Housing</p>
+        <p>Data is crowd-sourced and verified. Prices are approximate and vary by location. Always confirm on the provider's website.</p>
+    </div>
+</footer>
+
+<script>
+    function showTab(country) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById('tab-' + country).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function toggleClaim() {
+        const wrap = document.getElementById('claimFormWrap');
+        const btn = document.getElementById('claimBtn');
+        wrap.classList.toggle('open');
+        btn.textContent = wrap.classList.contains('open') ? 'Close' : 'Add Your Business \u2192';
+    }
+
+    function handleClaimSubmit(e) {
+        e.preventDefault();
+        const form = e.target;
+        const data = new FormData(form);
+        fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
+            .then(r => {
+                if (r.ok) {
+                    form.style.display = 'none';
+                    document.getElementById('formSuccess').style.display = 'block';
+                } else {
+                    alert('Something went wrong. Please try again or email us directly.');
+                }
+            })
+            .catch(() => alert('Network error. Please try again.'));
+    }
+</script>
+
+</body>
+</html>
