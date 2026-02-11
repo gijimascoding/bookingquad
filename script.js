@@ -1,5 +1,5 @@
 /* =============================================
-   SP Ventures | Institutional Real Estate Investment
+   SP Ventures | Redesigned
    ============================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -42,10 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (target) {
                 const offset = 80;
                 const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
             }
         });
     });
@@ -58,9 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
             const filter = btn.dataset.filter;
-
             portfolioCards.forEach(card => {
                 if (filter === 'all') {
                     card.classList.remove('hidden');
@@ -74,34 +69,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Scroll-triggered animations ---
-    const sections = document.querySelectorAll(
-        '.approach-card, .portfolio-card, .metric-card, .section-header, .office-item, .market-dot, .stat-item, .thesis-point'
+    const animElements = document.querySelectorAll(
+        '.portfolio-card, .approach-item, .thesis-card, .market-row:not(.market-row-head), .hero-stat, .about-left, .about-right'
     );
 
-    let animCounter = 0;
-    const sectionObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
-                const delay = animCounter * 50;
-                animCounter++;
                 setTimeout(() => {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
-                }, delay);
-                setTimeout(() => { animCounter = 0; }, 400);
-                sectionObserver.unobserve(entry.target);
+                }, i * 40);
+                observer.unobserve(entry.target);
             }
         });
-    }, {
-        threshold: 0.05,
-        rootMargin: '0px 0px 40px 0px'
-    });
+    }, { threshold: 0.05, rootMargin: '0px 0px 40px 0px' });
 
-    sections.forEach(el => {
+    animElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(16px)';
         el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        sectionObserver.observe(el);
+        observer.observe(el);
     });
 
     // --- Contact Form Handling (FormSubmit.co → info@spventures.co) ---
@@ -113,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Show loading state
             if (submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = `
@@ -136,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     contactForm.innerHTML = `
                         <div class="form-success">
-                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
                                 <polyline points="22 4 12 14.01 9 11.01"/>
                             </svg>
@@ -148,7 +135,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error('Form submission failed');
                 }
             } catch (error) {
-                // Fallback: open mailto if the form service fails
                 const data = Object.fromEntries(formData.entries());
                 const subject = encodeURIComponent('Investment Inquiry | SP Ventures');
                 const body = encodeURIComponent(
@@ -160,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 );
                 window.location.href = `mailto:info@spventures.co?subject=${subject}&body=${body}`;
 
-                // Reset button
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalBtnHTML;
@@ -168,23 +153,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // --- Stat number animation ---
-    const statValues = document.querySelectorAll('.stat-number');
-    const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-                statsObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-
-    statValues.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(10px)';
-        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        statsObserver.observe(el);
-    });
 });
