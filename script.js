@@ -1,5 +1,5 @@
 /* =============================================
-   BookingQuad | Landing Page Interactions
+   MileHomes | Residential Property Management
    ============================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
     });
 
-    // Close mobile nav when clicking a link
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             mobileToggle.classList.remove('active');
@@ -52,36 +51,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Scroll-triggered animations ---
-    const animateElements = document.querySelectorAll('.animate-in');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -40px 0px'
-    });
-
-    animateElements.forEach(el => observer.observe(el));
-
-    // Auto-add animation classes to sections
     const sections = document.querySelectorAll(
-        '.platform-card, .solution-card, .why-point, .step-card, .comparison-card, .section-header'
+        '.service-card, .approach-card, .metric-card, .section-header, .office-item, .market-dot, .stat-item, .value-item'
     );
+
     let animCounter = 0;
     const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                const delay = animCounter * 60;
+                const delay = animCounter * 50;
                 animCounter++;
                 setTimeout(() => {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
                 }, delay);
-                // Reset counter after a batch completes
                 setTimeout(() => { animCounter = 0; }, 400);
                 sectionObserver.unobserve(entry.target);
             }
@@ -94,50 +77,79 @@ document.addEventListener('DOMContentLoaded', () => {
     sections.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(16px)';
-        el.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
         sectionObserver.observe(el);
     });
 
-    // --- Contact Form Handling ---
+    // --- Contact Form Handling (FormSubmit.co → info@spventures.co) ---
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
+
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Gather form data
-            const formData = new FormData(contactForm);
-            const data = Object.fromEntries(formData.entries());
-
-            // Build mailto link as a fallback
-            const subject = encodeURIComponent('New Inquiry | BookingQuad Technology Platform');
-            const body = encodeURIComponent(
-                `Name: ${data.name}\n` +
-                `Email: ${data.email}\n` +
-                `Phone: ${data.phone || 'Not provided'}\n` +
-                `Properties: ${data.properties}\n` +
-                `Property Type: ${data.type}\n` +
-                `Goals: ${data.message || 'Not provided'}\n`
-            );
-
-            // Open mailto
-            window.location.href = `mailto:info@bookingcloud.com?subject=${subject}&body=${body}`;
-
-            // Show success state
-            contactForm.innerHTML = `
-                <div class="form-success">
-                    <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
+            // Show loading state
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
+                        <path d="M12 2v4m0 12v4m-7.07-3.93l2.83-2.83m8.48-8.48l2.83-2.83M2 12h4m12 0h4m-3.93 7.07l-2.83-2.83M7.76 7.76L4.93 4.93"/>
                     </svg>
-                    <h3>Your request has been submitted</h3>
-                    <p>Our team will review your information and reach out within 24 hours with a tailored technology roadmap for your operation.</p>
-                </div>
-            `;
+                    Sending...
+                `;
+            }
+
+            const formData = new FormData(contactForm);
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    contactForm.innerHTML = `
+                        <div class="form-success">
+                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            <h3>Thank you for your inquiry</h3>
+                            <p>Your message has been sent to our property management team. We will respond within one business day.</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                // Fallback: open mailto if the form service fails
+                const data = Object.fromEntries(formData.entries());
+                const subject = encodeURIComponent('Property Management Inquiry | MileHomes');
+                const body = encodeURIComponent(
+                    `Name: ${data.firstName} ${data.lastName}\n` +
+                    `Email: ${data.email}\n` +
+                    `Phone: ${data.phone || 'Not provided'}\n` +
+                    `Property Location: ${data.location || 'Not specified'}\n` +
+                    `Property Type: ${data.propertyType || 'Not specified'}\n` +
+                    `Number of Units: ${data.unitCount || 'Not specified'}\n` +
+                    `Message: ${data.message || 'Not provided'}\n`
+                );
+                window.location.href = `mailto:info@spventures.co?subject=${subject}&body=${body}`;
+
+                // Reset button
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnHTML;
+                }
+            }
         });
     }
 
-    // --- Counter animation for hero stats ---
-    const statValues = document.querySelectorAll('.stat-value');
+    // --- Stat number animation ---
+    const statValues = document.querySelectorAll('.stat-number');
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
