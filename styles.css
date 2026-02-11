@@ -1,5 +1,5 @@
 /* =============================================
-   MileHomes — Institutional Property Management
+   SP Ventures — Institutional Real Estate Investment
    ============================================= */
 
 :root {
@@ -87,7 +87,7 @@ h4 { font-size: 1.05rem; font-weight: 600; }
 .navbar.scrolled { background: rgba(255,255,255,0.97); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--color-gray-100); padding: 14px 0; box-shadow: var(--shadow-sm); }
 .nav-container { display: flex; align-items: center; justify-content: space-between; }
 .logo { display: flex; align-items: center; gap: 12px; z-index: 1001; }
-.logo-mark { width: 40px; height: 40px; background: var(--color-primary); color: var(--color-accent); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 0.9375rem; letter-spacing: -0.02em; }
+.logo-mark { width: 40px; height: 40px; background: var(--color-primary); color: var(--color-accent); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 700; font-size: 0.8125rem; letter-spacing: -0.02em; }
 .logo-text { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--color-primary); letter-spacing: 0.02em; text-transform: uppercase; }
 .navbar:not(.scrolled) .logo-text { color: var(--color-white); }
 .navbar:not(.scrolled) .logo-mark { background: rgba(255,255,255,0.1); color: var(--color-accent); border: 1px solid rgba(255,255,255,0.15); }
@@ -143,16 +143,6 @@ h4 { font-size: 1.05rem; font-weight: 600; }
 .metric-gold .metric-value { color: var(--color-primary); }
 .metric-gold .metric-label { color: var(--color-gray-600); }
 
-/* SERVICES */
-.services { padding: var(--space-5xl) 0; }
-.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); }
-.service-card { background: var(--color-white); border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); padding: var(--space-2xl); transition: all var(--transition-base); position: relative; }
-.service-card:hover { border-color: var(--color-gray-300); box-shadow: var(--shadow-lg); transform: translateY(-4px); }
-.service-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-lg); color: var(--color-accent); }
-.service-num { display: block; font-family: var(--font-display); font-size: 0.75rem; font-weight: 700; color: var(--color-gray-300); letter-spacing: 0.05em; margin-bottom: var(--space-sm); }
-.service-card h3 { margin-bottom: var(--space-sm); font-size: 1.125rem; }
-.service-card p { color: var(--color-gray-500); font-size: 0.9375rem; line-height: 1.7; }
-
 /* APPROACH */
 .approach { padding: var(--space-5xl) 0; background: var(--color-gray-50); }
 .approach-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--color-gray-200); border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden; }
@@ -162,6 +152,39 @@ h4 { font-size: 1.05rem; font-weight: 600; }
 .approach-card h3 { margin-bottom: var(--space-xs); font-size: 1.125rem; }
 .approach-tag { display: inline-block; font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: var(--space-md); }
 .approach-card p { color: var(--color-gray-500); font-size: 0.9375rem; line-height: 1.7; }
+
+/* PORTFOLIO */
+.portfolio { padding: var(--space-5xl) 0; }
+.portfolio-filters { display: flex; justify-content: center; gap: 8px; margin-bottom: var(--space-2xl); flex-wrap: wrap; }
+.filter-btn { font-family: var(--font-primary); font-size: 0.8125rem; font-weight: 500; padding: 10px 24px; border: 1px solid var(--color-gray-200); border-radius: var(--radius-sm); background: var(--color-white); color: var(--color-gray-500); cursor: pointer; transition: all var(--transition-fast); }
+.filter-btn:hover { border-color: var(--color-gray-300); color: var(--color-primary); }
+.filter-btn.active { background: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
+.portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); }
+.portfolio-card { border: 1px solid var(--color-gray-200); border-radius: var(--radius-lg); overflow: hidden; transition: all var(--transition-base); }
+.portfolio-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: var(--color-gray-300); }
+.portfolio-card.hidden { display: none; }
+.card-image { position: relative; height: 180px; background: var(--color-gray-50); }
+.card-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--color-gray-300); background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%); }
+.card-flag { position: absolute; top: 12px; right: 12px; font-size: 0.625rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-sm); text-transform: uppercase; letter-spacing: 0.08em; }
+.card-flag-ca { background: rgba(12,26,42,0.9); color: var(--color-white); }
+.card-flag-us { background: rgba(201,169,110,0.9); color: var(--color-primary); }
+.card-body { padding: var(--space-lg); }
+.card-type { display: block; font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: 6px; }
+.card-body h3 { font-size: 1.125rem; margin-bottom: 4px; }
+.card-location { font-size: 0.875rem; color: var(--color-gray-400); }
+
+/* INVESTMENT THESIS */
+.thesis { padding: var(--space-5xl) 0; background: var(--color-gray-50); }
+.thesis-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: var(--space-3xl); align-items: start; }
+.thesis-content h2 { margin-bottom: var(--space-md); }
+.thesis-content > p { color: var(--color-gray-500); font-size: 1rem; line-height: 1.8; }
+.thesis-points { display: flex; flex-direction: column; }
+.thesis-point { display: flex; gap: var(--space-xl); padding: var(--space-lg) 0; border-bottom: 1px solid var(--color-gray-200); }
+.thesis-point:first-child { padding-top: 0; }
+.thesis-point:last-child { border-bottom: none; }
+.thesis-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--color-gray-200); line-height: 1; min-width: 50px; letter-spacing: -0.04em; }
+.thesis-point h4 { margin-bottom: 4px; font-size: 1.0625rem; }
+.thesis-point p { color: var(--color-gray-500); font-size: 0.9375rem; line-height: 1.6; }
 
 /* MARKETS */
 .markets { padding: var(--space-5xl) 0; background: var(--color-primary); }
@@ -180,31 +203,6 @@ h4 { font-size: 1.05rem; font-weight: 600; }
 .markets-grid-list { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); }
 .market-dot { display: flex; align-items: center; gap: 12px; font-size: 1rem; color: rgba(255,255,255,0.7); padding: 8px 0; }
 .dot { display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--color-accent); }
-
-/* VALUES */
-.values { padding: var(--space-5xl) 0; background: var(--color-gray-50); }
-.values-layout { display: grid; grid-template-columns: 1fr 1.2fr; gap: var(--space-3xl); align-items: start; }
-.values-content h2 { margin-bottom: var(--space-md); }
-.values-content > p { color: var(--color-gray-500); font-size: 1rem; line-height: 1.8; }
-.values-grid { display: flex; flex-direction: column; }
-.value-item { display: flex; gap: var(--space-xl); padding: var(--space-lg) 0; border-bottom: 1px solid var(--color-gray-200); }
-.value-item:first-child { padding-top: 0; }
-.value-item:last-child { border-bottom: none; }
-.value-num { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--color-gray-200); line-height: 1; min-width: 50px; letter-spacing: -0.04em; }
-.value-item h4 { margin-bottom: 4px; font-size: 1.0625rem; }
-.value-item p { color: var(--color-gray-500); font-size: 0.9375rem; line-height: 1.6; }
-
-/* CTA SECTION */
-.cta-section { padding: var(--space-5xl) 0; background: var(--color-primary); text-align: center; position: relative; overflow: hidden; }
-.cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 20% 50%, rgba(201,169,110,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 80% at 80% 50%, rgba(37,99,235,0.05) 0%, transparent 60%); }
-.cta-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
-.cta-section h2 { color: var(--color-white); margin-bottom: var(--space-md); font-size: clamp(1.75rem, 3vw, 2.25rem); }
-.cta-section p { color: rgba(255,255,255,0.55); font-size: 1.0625rem; line-height: 1.75; margin-bottom: var(--space-xl); }
-.cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-.cta-section .btn-primary { background: var(--color-accent); color: var(--color-primary); }
-.cta-section .btn-primary:hover { background: var(--color-accent-light); }
-.cta-section .btn-outline { border-color: rgba(255,255,255,0.3); color: var(--color-white); }
-.cta-section .btn-outline:hover { border-color: var(--color-accent); color: var(--color-accent); }
 
 /* CONTACT */
 .contact { padding: var(--space-5xl) 0; }
@@ -262,12 +260,12 @@ h4 { font-size: 1.05rem; font-weight: 600; }
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
-    .services-grid { grid-template-columns: repeat(2, 1fr); }
     .about-layout { grid-template-columns: 1fr; }
     .about-metrics { grid-template-columns: repeat(4, 1fr); }
     .approach-grid { grid-template-columns: repeat(2, 1fr); }
+    .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+    .thesis-layout { grid-template-columns: 1fr; }
     .markets-layout { grid-template-columns: 1fr; }
-    .values-layout { grid-template-columns: 1fr; }
     .contact-layout { grid-template-columns: 1fr; }
     .footer-content { grid-template-columns: 1fr; }
 }
@@ -286,10 +284,11 @@ h4 { font-size: 1.05rem; font-weight: 600; }
     h1 { font-size: 2.25rem; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-lg); }
     .about-metrics { grid-template-columns: repeat(2, 1fr); }
-    .services-grid { grid-template-columns: 1fr; }
     .approach-grid { grid-template-columns: 1fr; border-radius: var(--radius-lg); }
-    .value-item { flex-direction: column; gap: var(--space-sm); }
-    .cta-actions { flex-direction: column; align-items: center; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .portfolio-filters { gap: 6px; }
+    .filter-btn { padding: 8px 16px; font-size: 0.75rem; }
+    .thesis-point { flex-direction: column; gap: var(--space-sm); }
     .contact-form { grid-template-columns: 1fr; }
     .footer-links { grid-template-columns: 1fr; gap: var(--space-lg); }
     .footer-bottom { flex-direction: column; gap: var(--space-md); text-align: center; }

@@ -1,5 +1,5 @@
 /* =============================================
-   MileHomes | Residential Property Management
+   SP Ventures | Institutional Real Estate Investment
    ============================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -50,9 +50,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- Portfolio Filtering ---
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.dataset.filter;
+
+            portfolioCards.forEach(card => {
+                if (filter === 'all') {
+                    card.classList.remove('hidden');
+                } else if (filter === 'canada' || filter === 'united-states') {
+                    card.classList.toggle('hidden', card.dataset.country !== filter);
+                } else {
+                    card.classList.toggle('hidden', card.dataset.type !== filter);
+                }
+            });
+        });
+    });
+
     // --- Scroll-triggered animations ---
     const sections = document.querySelectorAll(
-        '.service-card, .approach-card, .metric-card, .section-header, .office-item, .market-dot, .stat-item, .value-item'
+        '.approach-card, .portfolio-card, .metric-card, .section-header, .office-item, .market-dot, .stat-item, .thesis-point'
     );
 
     let animCounter = 0;
@@ -118,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <polyline points="22 4 12 14.01 9 11.01"/>
                             </svg>
                             <h3>Thank you for your inquiry</h3>
-                            <p>Your message has been sent to our property management team. We will respond within one business day.</p>
+                            <p>Our team will review your submission and respond within one business day.</p>
                         </div>
                     `;
                 } else {
@@ -127,14 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 // Fallback: open mailto if the form service fails
                 const data = Object.fromEntries(formData.entries());
-                const subject = encodeURIComponent('Property Management Inquiry | MileHomes');
+                const subject = encodeURIComponent('Investment Inquiry | SP Ventures');
                 const body = encodeURIComponent(
                     `Name: ${data.firstName} ${data.lastName}\n` +
                     `Email: ${data.email}\n` +
-                    `Phone: ${data.phone || 'Not provided'}\n` +
-                    `Property Location: ${data.location || 'Not specified'}\n` +
-                    `Property Type: ${data.propertyType || 'Not specified'}\n` +
-                    `Number of Units: ${data.unitCount || 'Not specified'}\n` +
+                    `Company: ${data.company || 'Not provided'}\n` +
+                    `Inquiry Type: ${data.inquiryType || 'Not specified'}\n` +
                     `Message: ${data.message || 'Not provided'}\n`
                 );
                 window.location.href = `mailto:info@spventures.co?subject=${subject}&body=${body}`;
