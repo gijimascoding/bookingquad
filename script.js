@@ -68,41 +68,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Scroll-triggered animations ---
-    const animElements = document.querySelectorAll(
-        '.portfolio-card, .approach-item, .thesis-card, .market-row:not(.market-row-head), .hero-stat, .about-left, .about-right'
-    );
+    // --- Scroll-triggered reveal animations ---
+    // Uses CSS class .reveal / .revealed for maximum reliability
+    setTimeout(() => {
+        const els = document.querySelectorAll(
+            '.portfolio-card, .approach-item, .thesis-card, .market-row:not(.market-row-head), .hero-stat, .about-left, .about-right'
+        );
 
-    // Set initial hidden state via class
-    animElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(18px)';
-        el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
-    });
+        els.forEach(el => el.classList.add('reveal'));
 
-    const revealElement = (el, delay) => {
-        setTimeout(() => {
-            el.style.opacity = '1';
-            el.style.transform = 'translateY(0)';
-        }, delay);
-    };
+        const reveal = (el) => {
+            el.classList.add('revealed');
+            el.classList.remove('reveal');
+        };
 
-    // Use a large positive rootMargin to trigger well before elements enter viewport
-    const observer = new IntersectionObserver((entries) => {
-        let batchIdx = 0;
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                revealElement(entry.target, batchIdx * 60);
-                batchIdx++;
-                observer.unobserve(entry.target);
+        // Immediately reveal anything already in viewport
+        els.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight + 50 && rect.bottom > -50) {
+                reveal(el);
             }
         });
-    }, { threshold: 0, rootMargin: '50px 0px 50px 0px' });
 
-    // Small delay to ensure styles are applied before observing
-    requestAnimationFrame(() => {
-        animElements.forEach(el => observer.observe(el));
-    });
+        // Observer for the rest
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    reveal(entry.target);
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.01, rootMargin: '100px' });
+
+        els.forEach(el => {
+            if (!el.classList.contains('revealed')) {
+                obs.observe(el);
+            }
+        });
+    }, 100);
 
     // --- Contact Form Handling (FormSubmit.co → info@spventures.co) ---
     const contactForm = document.getElementById('contactForm');

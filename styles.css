@@ -188,6 +188,8 @@ h4 { font-size: 1.05rem; font-weight: 600; font-family: var(--font-sans); }
 /* ===== ANIMATIONS ===== */
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .btn:disabled { opacity: 0.7; cursor: not-allowed; }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
+.revealed { opacity: 1 !important; transform: translateY(0) !important; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
