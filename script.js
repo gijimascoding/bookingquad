@@ -73,22 +73,26 @@ document.addEventListener('DOMContentLoaded', () => {
         '.portfolio-card, .approach-item, .thesis-card, .market-row:not(.market-row-head), .hero-stat, .about-left, .about-right'
     );
 
+    let animIdx = 0;
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
+        entries.forEach((entry) => {
             if (entry.isIntersecting) {
+                const delay = animIdx * 60;
+                animIdx++;
                 setTimeout(() => {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
-                }, i * 40);
+                }, delay);
+                setTimeout(() => { animIdx = 0; }, 500);
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.05, rootMargin: '0px 0px 40px 0px' });
+    }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
 
     animElements.forEach(el => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(16px)';
-        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        el.style.transform = 'translateY(18px)';
+        el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
         observer.observe(el);
     });
 
