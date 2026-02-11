@@ -73,27 +73,35 @@ document.addEventListener('DOMContentLoaded', () => {
         '.portfolio-card, .approach-item, .thesis-card, .market-row:not(.market-row-head), .hero-stat, .about-left, .about-right'
     );
 
-    let animIdx = 0;
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                const delay = animIdx * 60;
-                animIdx++;
-                setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }, delay);
-                setTimeout(() => { animIdx = 0; }, 500);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
-
+    // Set initial hidden state via class
     animElements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(18px)';
         el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
-        observer.observe(el);
+    });
+
+    const revealElement = (el, delay) => {
+        setTimeout(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+        }, delay);
+    };
+
+    // Use a large positive rootMargin to trigger well before elements enter viewport
+    const observer = new IntersectionObserver((entries) => {
+        let batchIdx = 0;
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                revealElement(entry.target, batchIdx * 60);
+                batchIdx++;
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0, rootMargin: '50px 0px 50px 0px' });
+
+    // Small delay to ensure styles are applied before observing
+    requestAnimationFrame(() => {
+        animElements.forEach(el => observer.observe(el));
     });
 
     // --- Contact Form Handling (FormSubmit.co → info@spventures.co) ---
